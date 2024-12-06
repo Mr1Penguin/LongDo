@@ -1,0 +1,12 @@
+name: Long Do
+run-name: ${{ github.actor }} is working
+on: [pull-request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: configurate
+        run: cmake -S . --preset ninja-multi
+      - name: build
+        run: cmake --build --preset release

@@ -20,8 +20,13 @@
     "buildPresets": [
 	{
 	    "name": "debug",
-	    "configurePreset": "default",
+	    "configurePreset": "ninja-multi",
 	    "configuration": "Debug"
-	}
+	},
+	{
+	    "name": "release",
+	    "configurePreset": "ninja-multi",
+	    "configuration": "Release"
+	},
     ]
 }
