@@ -6,7 +6,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: configurate
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: configure
         run: cmake -S . --preset ninja-multi
       - name: build
         run: cmake --build --preset release
