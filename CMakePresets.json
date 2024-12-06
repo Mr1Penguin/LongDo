@@ -1,0 +1,27 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+	"major": 3,
+	"minor": 23,
+	"patch": 0
+    },
+    "configurePresets": [
+	{
+	    "name": "default",
+	    "generator": "Ninja",
+	    "binaryDir": "${sourceDir}/build/default"
+	},
+	{
+	    "name": "ninja-multi",
+	    "inherits": "default",
+	    "generator": "Ninja Multi-Config"
+	}
+    ],
+    "buildPresets": [
+	{
+	    "name": "debug",
+	    "configurePreset": "default",
+	    "configuration": "Debug"
+	}
+    ]
+}
