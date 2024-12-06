@@ -1,0 +1,13 @@
+name: Long Do
+run-name: Checking LongDo pull request
+on: [pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: seanmiddleditch/gha-setup-ninja@master
+      - name: configure
+        run: cmake -S . --preset ninja-multi
+      - name: build
+        run: cmake --build --preset release
