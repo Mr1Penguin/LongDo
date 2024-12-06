@@ -1,5 +1,5 @@
 name: Long Do
-run-name: ${{ github.actor }} is working
+run-name: Checking LongDo pull request
 on: [pull_request]
 jobs:
   build:
