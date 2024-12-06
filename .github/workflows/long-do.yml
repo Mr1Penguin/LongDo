@@ -1,6 +1,6 @@
 name: Long Do
 run-name: ${{ github.actor }} is working
-on: [pull-request]
+on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
