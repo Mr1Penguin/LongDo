@@ -27,6 +27,6 @@
 	    "name": "release",
 	    "configurePreset": "ninja-multi",
 	    "configuration": "Release"
-	},
+	}
     ]
 }
