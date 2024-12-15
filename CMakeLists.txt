@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.7 COMPONENTS Quick Gui REQUIRED)
-qt_standard_project_setup(REQUIRES 6.7)
+find_package(Qt6 6.5 COMPONENTS Quick Gui REQUIRED)
+qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable (long-do
   src/main.cpp
