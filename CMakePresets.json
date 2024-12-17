@@ -24,7 +24,7 @@
 	    "inherits": "default",
 	    "binaryDir": "${sourceDir}/build/clang-tidy",
 	    "cacheVariables": {
-	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy;--allow-no-checks",
+	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
 	        "CLANG_TIDY_RUN": "ON"
 	    }
 	}
