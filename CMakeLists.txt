@@ -26,3 +26,7 @@ qt_add_qml_module(long-do
 )
 
 target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick)
+
+if(CLANG_TIDY_RUN)
+  file(WRITE "${CMAKE_BINARY_DIR}/.clang-tidy" "Checks: '-*'\n")
+endif()
