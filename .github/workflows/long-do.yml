@@ -26,6 +26,8 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.5.*
+      - run: which clang-tidy
+      - run: clang-tidy --version
       - name: configure
         run: cmake -S . --preset clang-tidy
       - name: build
