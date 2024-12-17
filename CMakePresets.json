@@ -9,12 +9,24 @@
 	{
 	    "name": "default",
 	    "generator": "Ninja",
-	    "binaryDir": "${sourceDir}/build/default"
+	    "binaryDir": "${sourceDir}/build/default",
+	    "cacheVariables": {
+	        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+	    }
 	},
 	{
 	    "name": "ninja-multi",
 	    "inherits": "default",
 	    "generator": "Ninja Multi-Config"
+	},
+	{
+	    "name": "clang-tidy",
+	    "inherits": "default",
+	    "binaryDir": "${sourceDir}/build/clang-tidy",
+	    "cacheVariables": {
+	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
+	        "CLANG_TIDY_RUN": "ON"
+	    }
 	}
     ],
     "buildPresets": [
@@ -27,6 +39,10 @@
 	    "name": "release",
 	    "configurePreset": "ninja-multi",
 	    "configuration": "Release"
+	},
+        {
+	    "name": "clang-tidy",
+	    "configurePreset": "clang-tidy"
 	}
     ]
 }
