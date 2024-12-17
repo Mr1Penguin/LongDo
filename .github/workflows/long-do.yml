@@ -4,28 +4,23 @@ on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build-type: ['Debug', 'RelWithDebInfo']
     steps:
       - uses: actions/checkout@v4
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: 6.5.*
+      - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset ninja-multi
       - name: build
-        run: cmake --build --preset release
+        run: cmake --build --preset ${{ matrix.build-type }}
   clang_tidy:
     runs-on: ubuntu-latest
     name: "Clang-tidy run"
     needs: build
     steps:
       - uses: actions/checkout@v4
-      - uses: seanmiddleditch/gha-setup-ninja@master
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: 6.5.*
+      - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset clang-tidy
       - name: build

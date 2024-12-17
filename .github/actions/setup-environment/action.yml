@@ -1,0 +1,9 @@
+name: Setup build environment
+runs:
+  using: composite
+  steps:
+    - uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: 6.5.*
