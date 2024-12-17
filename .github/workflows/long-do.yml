@@ -26,6 +26,10 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: 6.5.*
+      - name: Install LLVM and Clang
+        uses: KyleMayes/install-llvm-action@v2
+        with:
+          version: 19
       - name: configure
         run: cmake -S . --preset clang-tidy
       - name: build
