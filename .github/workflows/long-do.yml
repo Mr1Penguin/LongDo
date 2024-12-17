@@ -25,3 +25,14 @@ jobs:
         run: cmake -S . --preset clang-tidy
       - name: build
         run: cmake --build --preset clang-tidy
+  clazy:
+    runs-on: ubuntu-latest
+    name: "Clazy run"
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - name: configure
+        run: cmake -S . --preset clazy
+      - name: build
+        run: cmake --build --preset clazy
