@@ -38,7 +38,7 @@
 	{
 	    "name": "release",
 	    "configurePreset": "ninja-multi",
-	    "configuration": "Release"
+	    "configuration": "RelWithDebInfo"
 	},
         {
 	    "name": "clang-tidy",

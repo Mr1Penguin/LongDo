@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build-type: ['Debug', 'RelWithDebInfo']
+        build-type: ['debug', 'release']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
