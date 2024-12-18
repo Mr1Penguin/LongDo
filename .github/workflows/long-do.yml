@@ -32,7 +32,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
-      - run: sudo apt install -y clazy-18
+      - run: sudo apt-get remove gcc-14
+      - run: sudo apt-get autoremove
+      - run: sudo apt-get install -y clazy
       - name: configure
         run: cmake -S . --preset clazy
       - name: build
