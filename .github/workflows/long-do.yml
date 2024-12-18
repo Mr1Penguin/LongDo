@@ -32,6 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: sudo apt install -y clazy
       - name: configure
         run: cmake -S . --preset clazy
       - name: build
