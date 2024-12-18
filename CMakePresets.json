@@ -27,6 +27,18 @@
 	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
 	        "CLANG_TIDY_RUN": "ON"
 	    }
+	},
+	{
+	    "name": "clazy",
+	    "inherits": "default",
+	    "binaryDir": "${sourceDir}/build/clazy",
+	    "cacheVariables": {
+	        "CMAKE_CXX_COMPILER": "clazy"
+	    },
+	    "environment": {
+		"CLAZY_CHECKS": "qt6-deprecated-api-fixes,qt6-header-fixes,qt6-qhash-signature,qt6-qlatin1stringchar-to-u,qt6-fwd-fixes,missing-qobject-macro",
+		"CLAZY_IGNORE_DIRS": "build/*"
+	    }
 	}
     ],
     "buildPresets": [
@@ -43,6 +55,10 @@
         {
 	    "name": "clang-tidy",
 	    "configurePreset": "clang-tidy"
+	},
+	{
+	    "name": "clazy",
+	    "configurePreset": "clazy"
 	}
     ]
 }
