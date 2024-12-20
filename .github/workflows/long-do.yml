@@ -26,6 +26,8 @@ jobs:
       - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset clang-tidy
+        env:
+          CXX: clang++
       - name: build
         run: cmake --build --preset clang-tidy
   clazy:
