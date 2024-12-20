@@ -7,11 +7,14 @@ jobs:
     strategy:
       matrix:
         build-type: ['debug', 'release']
+        cxx: ['g++', 'clang++']
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset ninja-multi
+        env:
+          CXX: ${{ matrix.cxx }}
       - name: build
         run: cmake --build --preset ${{ matrix.build-type }}
   clang_tidy:
@@ -23,6 +26,8 @@ jobs:
       - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset clang-tidy
+        env:
+          CXX: clang++
       - name: build
         run: cmake --build --preset clang-tidy
   clazy:
