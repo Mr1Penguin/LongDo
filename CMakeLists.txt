@@ -14,6 +14,11 @@ qt_add_executable(long-do
   src/main.cpp
 )
 
+target_include_directories(long-do
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ioc
+)
+
 target_compile_options(long-do
   PRIVATE
   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Werror -Woverloaded-virtual -Wunused -Wcast-align -Wconversion -Wmisleading-indentation -Wdouble-promotion -Wimplicit-fallthrough
@@ -36,4 +41,11 @@ target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick)
 
 if(CLANG_TIDY_RUN)
   file(WRITE "${CMAKE_BINARY_DIR}/.clang-tidy" "Checks: '-*,llvm-twine-local'\n")
+endif()
+
+if (ENABLE_UT)
+  find_package(Qt6 6.5 REQUIRED COMPONENTS Test)
+  enable_testing(true)
+  set_target_properties(long-do PROPERTIES EXCLUDE_FROM_ALL ON)
+  add_subdirectory(ut)
 endif()

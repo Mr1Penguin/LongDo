@@ -17,10 +17,23 @@ jobs:
           CXX: ${{ matrix.cxx }}
       - name: build
         run: cmake --build --preset ${{ matrix.build-type }}
+  unit_tests:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        preset: ['ut-debug', 'ut-release']
+        cxx:  ['g++', 'clang++']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --workflow --preset ${{ matrix.preset }}
+        env:
+          CXX: ${{ matrix.cxx }}
   clang_tidy:
     runs-on: ubuntu-latest
     name: "Clang-tidy run"
-    needs: build
+    needs: unit_tests
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
@@ -33,7 +46,7 @@ jobs:
   clazy:
     runs-on: ubuntu-latest
     name: "Clazy run"
-    needs: build
+    needs: unit_tests
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment

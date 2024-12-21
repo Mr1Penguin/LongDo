@@ -39,6 +39,14 @@
 		"CLAZY_CHECKS": "qt6-deprecated-api-fixes,qt6-header-fixes,qt6-qhash-signature,qt6-qlatin1stringchar-to-u,qt6-fwd-fixes,missing-qobject-macro",
 		"CLAZY_IGNORE_DIRS": "build/*"
 	    }
+	},
+	{
+	    "name": "ut",
+	    "inherits": "ninja-multi",
+	    "binaryDir": "${sourceDir}/build/ut",
+	    "cacheVariables": {
+		"ENABLE_UT": "ON"
+	    }
 	}
     ],
     "buildPresets": [
@@ -59,6 +67,70 @@
 	{
 	    "name": "clazy",
 	    "configurePreset": "clazy"
+	},
+	{
+	    "name": "ut-debug",
+	    "configurePreset": "ut",
+	    "configuration": "Debug"
+	},
+	{
+	    "name": "ut-release",
+	    "configurePreset": "ut",
+	    "configuration": "RelWithDebInfo"
+	}
+    ],
+    "testPresets": [
+	{
+	    "name": "ut-debug",
+	    "configurePreset": "ut",
+	    "output": {
+		"outputOnFailure": true
+	    },
+	    "configuration": "Debug"
+	},
+	{
+	    "name": "ut-release",
+	    "configurePreset": "ut",
+	    "output": {
+		"outputOnFailure": true
+	    },
+	    "configuration": "RelWithDebInfo"
+	}
+    ],
+    "workflowPresets": [
+	{
+	    "name": "ut-debug",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-debug"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-debug"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-release",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-release"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-release"
+		}
+	    ]
 	}
     ]
 }
