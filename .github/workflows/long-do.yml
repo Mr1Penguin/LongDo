@@ -39,10 +39,15 @@ jobs:
       - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset clang-tidy
-        env:
-          CXX: clang++
       - name: build
         run: cmake --build --preset clang-tidy
+  ut_clang_tidy:
+    runs-on: ubuntu-latest
+    needs: unit_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --workflow --preset ut-clang-tidy
   clazy:
     runs-on: ubuntu-latest
     name: "Clazy run"

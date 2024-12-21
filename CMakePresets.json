@@ -9,10 +9,7 @@
 	{
 	    "name": "default",
 	    "generator": "Ninja",
-	    "binaryDir": "${sourceDir}/build/default",
-	    "cacheVariables": {
-	        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-	    }
+	    "binaryDir": "${sourceDir}/build/default"
 	},
 	{
 	    "name": "ninja-multi",
@@ -24,8 +21,12 @@
 	    "inherits": "default",
 	    "binaryDir": "${sourceDir}/build/clang-tidy",
 	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "RelWithDebInfo",
 	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
 	        "CLANG_TIDY_RUN": "ON"
+	    },
+	    "environment": {
+		"CXX": "clang++"
 	    }
 	},
 	{
@@ -33,9 +34,11 @@
 	    "inherits": "default",
 	    "binaryDir": "${sourceDir}/build/clazy",
 	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "RelWithDebInfo",
 	        "CMAKE_CXX_COMPILER": "clazy"
 	    },
 	    "environment": {
+		"CXX": "clang++",
 		"CLAZY_CHECKS": "qt6-deprecated-api-fixes,qt6-header-fixes,qt6-qhash-signature,qt6-qlatin1stringchar-to-u,qt6-fwd-fixes,missing-qobject-macro",
 		"CLAZY_IGNORE_DIRS": "build/*"
 	    }
@@ -47,6 +50,12 @@
 	    "cacheVariables": {
 		"ENABLE_UT": "ON"
 	    }
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "inherits": ["ut", "clang-tidy"],
+	    "generator": "Ninja",
+	    "binaryDir": "${sourceDir}/build/ut-clang-tidy"
 	}
     ],
     "buildPresets": [
@@ -77,6 +86,10 @@
 	    "name": "ut-release",
 	    "configurePreset": "ut",
 	    "configuration": "RelWithDebInfo"
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "configurePreset": "ut-clang-tidy"
 	}
     ],
     "testPresets": [
@@ -129,6 +142,19 @@
 		{
 		    "type": "test",
 		    "name": "ut-release"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut-clang-tidy"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-clang-tidy"
 		}
 	    ]
 	}
