@@ -48,7 +48,8 @@
 	    "inherits": "ninja-multi",
 	    "binaryDir": "${sourceDir}/build/ut",
 	    "cacheVariables": {
-		"ENABLE_UT": "ON"
+		"ENABLE_UT": "ON",
+		"MEMORYCHECK_SUPPRESSIONS_FILE": "${sourceDir}/qtest.supp"
 	    }
 	},
 	{
