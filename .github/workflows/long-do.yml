@@ -63,7 +63,7 @@ jobs:
       - uses: ./.github/actions/setup-environment
       - run: cmake --workflow --preset ut-clang-tidy
   ut_valgrind:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     needs: unit_tests
     steps:
       - uses: actions/checkout@v4
