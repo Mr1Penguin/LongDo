@@ -65,8 +65,9 @@ jobs:
   ut_valgrind:
     runs_on: ubuntu-latest
     needs: unit_tests
-    - uses: actions/checkout@v4
-    - uses: ./.github/actions/setup-environment
-    - run: cmake --preset ut
-    - run: cmake --build --preset ut-release
-    - run: ctest -T memcheck --test-dir build/ut --preset ut-release
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --preset ut
+      - run: cmake --build --preset ut-release
+      - run: ctest -T memcheck --test-dir build/ut --preset ut-release
