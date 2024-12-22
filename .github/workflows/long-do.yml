@@ -68,6 +68,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: sudo apt-get install -y valgrind
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
       - run: ctest -T memcheck --test-dir build/ut --preset ut-release
