@@ -72,3 +72,10 @@ jobs:
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
       - run: ctest -T memcheck --test-dir build/ut --preset ut-release
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
+      - uses: actions/upload-artifact@v4
+        with:
+          name: valgrind-artifact
+          path: build/ut/Testing/Temporary/MemoryChecker*
+          if-no-files:found: ignore
+          retention-days: 5
