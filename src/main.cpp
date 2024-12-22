@@ -7,7 +7,6 @@
 #include <Qt>
 
 int main(int argc, char** argv) {
-
   QGuiApplication app(argc, argv);
 
   QQmlApplicationEngine engine;
@@ -16,7 +15,7 @@ int main(int argc, char** argv) {
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
       [&mainPage](QObject* obj, const QUrl& objUrl) {
-        if (obj != nullptr && mainPage == objUrl) {
+        if (obj == nullptr && mainPage == objUrl) {
           QCoreApplication::exit(-1);
         }
       },
