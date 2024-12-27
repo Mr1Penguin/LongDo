@@ -8,5 +8,5 @@ fi
 
 if [ -e "$1" ]
 then
-    awk -e '/}/ { printf "}\0"; next } { print $0 }' "$0" | sort -z | uniq -z | tr '\0' '\n' > "$(dirname "$1")"/clean.supp
+    awk -e '/}/ { printf "}\0"; next } { print $0 }' "$1" | sort -z | uniq -z | tr '\0' '\n' > "$(dirname "$1")"/clean.supp
 fi
