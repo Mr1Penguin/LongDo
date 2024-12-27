@@ -72,10 +72,10 @@ jobs:
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
       - run: ctest -T memcheck --test-dir build/ut --preset ut-release
-      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty
       - name: Delete empty reports
         run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
-      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -exec cat {} \;
       - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -exec ./scripts/memcheck-split.awk {} \;
       - run: ./scripts/supp-clean.sh build/ut/Testing/Temporary/all.supp
       - uses: actions/upload-artifact@v4
