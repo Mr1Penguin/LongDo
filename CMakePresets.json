@@ -58,6 +58,16 @@
 	    "inherits": ["ut", "clang-tidy"],
 	    "generator": "Ninja",
 	    "binaryDir": "${sourceDir}/build/ut-clang-tidy"
+	},
+	{
+	    "name": "ut-san",
+	    "inherits": "ut",
+	    "generator": "Ninja",
+	    "binaryDir": "${sourceDir}/build/ut-asan",
+	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "Debug",
+		"ENABLE_SAN": "ON"
+	    }
 	}
     ],
     "buildPresets": [
@@ -92,6 +102,10 @@
 	{
 	    "name": "ut-clang-tidy",
 	    "configurePreset": "ut-clang-tidy"
+	},
+	{
+	    "name": "ut-san",
+	    "configurePreset": "ut-san"
 	}
     ],
     "testPresets": [
@@ -110,6 +124,13 @@
 		"outputOnFailure": true
 	    },
 	    "configuration": "RelWithDebInfo"
+	},
+	{
+	    "name": "ut-san",
+	    "configurePreset": "ut-san",
+	    "output": {
+		"outputOnFailure": true
+	    }
 	}
     ],
     "workflowPresets": [
@@ -157,6 +178,23 @@
 		{
 		    "type": "build",
 		    "name": "ut-clang-tidy"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-san",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut-san"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-san"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-san"
 		}
 	    ]
 	}
