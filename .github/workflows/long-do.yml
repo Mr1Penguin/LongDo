@@ -72,8 +72,10 @@ jobs:
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
       - run: ctest -T memcheck --test-dir build/ut --preset ut-release
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
       - name: Delete empty reports
         run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f
       - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -exec ./scripts/memcheck-split.awk {} \;
       - run: ./scripts/supp-clean.sh build/ut/Testing/Temporary/all.supp
       - uses: actions/upload-artifact@v4
@@ -88,5 +90,6 @@ jobs:
           path: build/ut/Testing/Temporary/clean.supp
           if-no-files-found: ignore
           retention-days: 5
+      - run: find build/ut/Testing/Temporary/ -name 'MemoryChecker*.report' -type f
       - name: Fail if there are reports
         run: test $(find build/ut/Testing/Temporary/ -name 'MemoryChecker*.report' -type f | wc -l) -eq 0
