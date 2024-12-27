@@ -9,10 +9,7 @@
 	{
 	    "name": "default",
 	    "generator": "Ninja",
-	    "binaryDir": "${sourceDir}/build/default",
-	    "cacheVariables": {
-	        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
-	    }
+	    "binaryDir": "${sourceDir}/build/default"
 	},
 	{
 	    "name": "ninja-multi",
@@ -24,8 +21,12 @@
 	    "inherits": "default",
 	    "binaryDir": "${sourceDir}/build/clang-tidy",
 	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "RelWithDebInfo",
 	        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
 	        "CLANG_TIDY_RUN": "ON"
+	    },
+	    "environment": {
+		"CXX": "clang++"
 	    }
 	},
 	{
@@ -33,11 +34,39 @@
 	    "inherits": "default",
 	    "binaryDir": "${sourceDir}/build/clazy",
 	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "RelWithDebInfo",
 	        "CMAKE_CXX_COMPILER": "clazy"
 	    },
 	    "environment": {
+		"CXX": "clang++",
 		"CLAZY_CHECKS": "qt6-deprecated-api-fixes,qt6-header-fixes,qt6-qhash-signature,qt6-qlatin1stringchar-to-u,qt6-fwd-fixes,missing-qobject-macro",
 		"CLAZY_IGNORE_DIRS": "build/*"
+	    }
+	},
+	{
+	    "name": "ut",
+	    "inherits": "ninja-multi",
+	    "binaryDir": "${sourceDir}/build/ut",
+	    "cacheVariables": {
+		"ENABLE_UT": "ON",
+		"MEMORYCHECK_SUPPRESSIONS_FILE": "${sourceDir}/qtest.supp",
+		"VALGRIND_COMMAND_OPTIONS": "--gen-suppressions=all --leak-check=full --show-leak-kinds=all --track-origins=yes -q"
+	    }
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "inherits": ["ut", "clang-tidy"],
+	    "generator": "Ninja",
+	    "binaryDir": "${sourceDir}/build/ut-clang-tidy"
+	},
+	{
+	    "name": "ut-san",
+	    "inherits": "ut",
+	    "generator": "Ninja",
+	    "binaryDir": "${sourceDir}/build/ut-asan",
+	    "cacheVariables": {
+		"CMAKE_BUILD_TYPE": "Debug",
+		"ENABLE_SAN": "ON"
 	    }
 	}
     ],
@@ -59,6 +88,115 @@
 	{
 	    "name": "clazy",
 	    "configurePreset": "clazy"
+	},
+	{
+	    "name": "ut-debug",
+	    "configurePreset": "ut",
+	    "configuration": "Debug"
+	},
+	{
+	    "name": "ut-release",
+	    "configurePreset": "ut",
+	    "configuration": "RelWithDebInfo"
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "configurePreset": "ut-clang-tidy"
+	},
+	{
+	    "name": "ut-san",
+	    "configurePreset": "ut-san"
+	}
+    ],
+    "testPresets": [
+	{
+	    "name": "ut-debug",
+	    "configurePreset": "ut",
+	    "output": {
+		"outputOnFailure": true
+	    },
+	    "configuration": "Debug"
+	},
+	{
+	    "name": "ut-release",
+	    "configurePreset": "ut",
+	    "output": {
+		"outputOnFailure": true
+	    },
+	    "configuration": "RelWithDebInfo"
+	},
+	{
+	    "name": "ut-san",
+	    "configurePreset": "ut-san",
+	    "output": {
+		"outputOnFailure": true
+	    }
+	}
+    ],
+    "workflowPresets": [
+	{
+	    "name": "ut-debug",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-debug"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-debug"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-release",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-release"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-release"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-clang-tidy",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut-clang-tidy"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-clang-tidy"
+		}
+	    ]
+	},
+	{
+	    "name": "ut-san",
+	    "steps": [
+		{
+		    "type": "configure",
+		    "name": "ut-san"
+		},
+		{
+		    "type": "build",
+		    "name": "ut-san"
+		},
+		{
+		    "type": "test",
+		    "name": "ut-san"
+		}
+	    ]
 	}
     ]
 }

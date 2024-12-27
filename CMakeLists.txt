@@ -14,11 +14,20 @@ qt_add_executable(long-do
   src/main.cpp
 )
 
-target_compile_options(long-do
+target_include_directories(long-do
   PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/ioc
+)
+
+add_compile_options(
   -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Werror -Woverloaded-virtual -Wunused -Wcast-align -Wconversion -Wmisleading-indentation -Wdouble-promotion -Wimplicit-fallthrough
-  $<$<STREQUAL:${CMAKE_CXX_COMPILER_ID},GNU>:-Wduplicated-branches -Wduplicated-cond -Wlogical-op -Wuseless-cast>
-  $<$<STREQUAL:${CMAKE_CXX_COMPILER_ID},Clang>:-Weverything -Wno-global-constructors -Wno-missing-prototypes -Wno-exit-time-destructors -Wno-c++98-compat -Wno-c++20-compat>
+  "$<$<CXX_COMPILER_ID:GNU>:-Wduplicated-branches$<SEMICOLON>-Wduplicated-cond$<SEMICOLON>-Wlogical-op$<SEMICOLON>-Wuseless-cast>"
+  "$<$<CXX_COMPILER_ID:Clang>:-Weverything$<SEMICOLON>-Wno-global-constructors$<SEMICOLON>-Wno-missing-prototypes$<SEMICOLON>-Wno-exit-time-destructors$<SEMICOLON>-Wno-c++98-compat$<SEMICOLON>-Wno-c++20-compat>"
+  "$<$<BOOL:${ENABLE_SAN}>:-fsanitize=undefined$<SEMICOLON>-fsanitize=address$<SEMICOLON>-fno-omit-frame-pointer>"
+)
+
+add_link_options(
+  "$<$<BOOL:${ENABLE_SAN}>:-fsanitize=undefined$<SEMICOLON>-fsanitize=address$<SEMICOLON>-fno-omit-frame-pointer>"
 )
 
 set_source_files_properties(qml/main.qml PROPERTIES
@@ -36,4 +45,11 @@ target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick)
 
 if(CLANG_TIDY_RUN)
   file(WRITE "${CMAKE_BINARY_DIR}/.clang-tidy" "Checks: '-*,llvm-twine-local'\n")
+endif()
+
+if (ENABLE_UT)
+  include(CTest)
+  find_package(Qt6 6.5 REQUIRED COMPONENTS Test)
+  set_target_properties(long-do PROPERTIES EXCLUDE_FROM_ALL ON)
+  add_subdirectory(ut)
 endif()

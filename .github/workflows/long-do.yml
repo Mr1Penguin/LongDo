@@ -17,23 +17,34 @@ jobs:
           CXX: ${{ matrix.cxx }}
       - name: build
         run: cmake --build --preset ${{ matrix.build-type }}
+  unit_tests:
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      matrix:
+        preset: ['ut-debug', 'ut-release']
+        cxx:  ['g++', 'clang++']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --workflow --preset ${{ matrix.preset }}
+        env:
+          CXX: ${{ matrix.cxx }}
   clang_tidy:
     runs-on: ubuntu-latest
     name: "Clang-tidy run"
-    needs: build
+    needs: unit_tests
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
       - name: configure
         run: cmake -S . --preset clang-tidy
-        env:
-          CXX: clang++
       - name: build
         run: cmake --build --preset clang-tidy
   clazy:
     runs-on: ubuntu-latest
     name: "Clazy run"
-    needs: build
+    needs: unit_tests
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
@@ -44,3 +55,45 @@ jobs:
         run: cmake -S . --preset clazy
       - name: build
         run: cmake --build --preset clazy
+  ut_clang_tidy:
+    runs-on: ubuntu-latest
+    needs: unit_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --workflow --preset ut-clang-tidy
+  ut_valgrind:
+    runs-on: ubuntu-latest
+    needs: unit_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: sudo apt-get install -y valgrind
+      - run: cmake --preset ut
+      - run: cmake --build --preset ut-release
+      - run: ctest -T memcheck --test-dir build/ut --preset ut-release
+      - name: Delete empty reports
+        run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
+      - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -exec ./scripts/memcheck-split.awk {} \;
+      - run: ./scripts/supp-clean.sh build/ut/Testing/Temporary/all.supp
+      - uses: actions/upload-artifact@v4
+        with:
+          name: valgrind-reports
+          path: build/ut/Testing/Temporary/MemoryChecker*.report
+          if-no-files-found: ignore
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: suppressions
+          path: build/ut/Testing/Temporary/clean.supp
+          if-no-files-found: ignore
+          retention-days: 5
+      - name: Fail if there are reports
+        run: test $(find build/ut/Testing/Temporary/ -name 'MemoryChecker*.report' -type f | wc -l) -eq 0
+  ut_san:
+    runs-on: ubuntu-latest
+    needs: unit_tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-environment
+      - run: cmake --workflow --preset ut-san
