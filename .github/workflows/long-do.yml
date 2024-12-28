@@ -1,6 +1,6 @@
 name: Long Do
 run-name: Checking LongDo pull request
-on: [pull_request]
+on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -10,7 +10,8 @@ public:
   ~ServiceUser() = default;
 
 protected:
-  ServiceUser()                                  = default;
+  ServiceUser() = default;
+  ServiceUser(std::shared_ptr<TService> service) : m_service(std::move(service)) {}
   ServiceUser(const ServiceUser&)                = default;
   ServiceUser(ServiceUser&&) noexcept            = default;
   ServiceUser& operator=(const ServiceUser&)     = default;
@@ -23,6 +24,16 @@ private:
 };
 
 template<class... TServices>
-class ServicesUser : public ServiceUser<TServices>... {};
+  requires(sizeof...(TServices) > 0)
+class ServicesUser : public ServiceUser<TServices>... {
+public:
+  using ServicesLoader = ServicesUser<TServices...>;
+
+protected:
+  ServicesUser(std::shared_ptr<TServices>... services) : ServiceUser<TServices>(std::move(services))... {}
+};
+
+template<class T>
+concept HasDependencies = requires(T obj) { typename T::ServicesLoader; };
 
 } // namespace long_do::ioc

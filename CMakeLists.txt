@@ -20,7 +20,7 @@ target_include_directories(long-do
 )
 
 add_compile_options(
-  -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Werror -Woverloaded-virtual -Wunused -Wcast-align -Wconversion -Wmisleading-indentation -Wdouble-promotion -Wimplicit-fallthrough
+  -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic -Werror -Woverloaded-virtual -Wunused -Wcast-align -Wconversion -Wmisleading-indentation -Wdouble-promotion -Wimplicit-fallthrough -fconcepts-diagnostics-depth=3
   "$<$<CXX_COMPILER_ID:GNU>:-Wduplicated-branches$<SEMICOLON>-Wduplicated-cond$<SEMICOLON>-Wlogical-op$<SEMICOLON>-Wuseless-cast>"
   "$<$<CXX_COMPILER_ID:Clang>:-Weverything$<SEMICOLON>-Wno-global-constructors$<SEMICOLON>-Wno-missing-prototypes$<SEMICOLON>-Wno-exit-time-destructors$<SEMICOLON>-Wno-c++98-compat$<SEMICOLON>-Wno-c++20-compat>"
   "$<$<BOOL:${ENABLE_SAN}>:-fsanitize=undefined$<SEMICOLON>-fsanitize=address$<SEMICOLON>-fno-omit-frame-pointer>"

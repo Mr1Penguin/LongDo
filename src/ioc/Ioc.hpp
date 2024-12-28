@@ -1,51 +1,43 @@
 #pragma once
 
 #include <concepts>
-#include <functional>
 #include <memory>
-#include <typeindex>
-#include <unordered_map>
+
+#include "Container.hpp"
+#include "ServiceUser.hpp"
 
 namespace long_do::ioc {
 
 class Ioc {
-private:
-  using InterfaceTypeIndex = std::type_index;
-
 public:
   template<class TInterface, std::derived_from<TInterface> TImplementation>
-  void registerService() noexcept {
-    addServiceConstructor<TImplementation>(typeid(TInterface));
+  void registerService() {
+    m_container.registerService<TInterface, TImplementation>(std::bind_front(&Ioc::make<TImplementation>, this));
   }
 
-  template<class TService>
-  std::shared_ptr<TService> resolveService() const noexcept {
-    if (const auto serviceConstructorIt = m_serviceConstructors.find({typeid(TService)});
-        serviceConstructorIt != std::ranges::cend(m_serviceConstructors)) {
-      return std::shared_ptr<TService>(static_cast<TService*>(serviceConstructorIt->second()));
-    }
+  template<class TInterface, std::derived_from<TInterface> TImplementation>
+  void registerSingleton(auto&&... args) {
+    m_container.registerSingleton<TInterface, TImplementation>(std::forward<decltype(args)>(args)...);
+  }
 
-    return nullptr;
+  template<HasDependencies T>
+  [[nodiscard]] auto make() const noexcept -> T {
+    return makeWithDependencies<T>(static_cast<T*>(nullptr));
   }
 
 private:
   template<class TImplementation>
-  [[nodiscard]] void* make() const noexcept {
+  [[nodiscard]] TImplementation* make() const noexcept {
     return new TImplementation();
   }
 
-  template<class TImplementation>
-  void addServiceConstructor(InterfaceTypeIndex interfaceIndex) {
-    auto constructor = std::bind_front(&Ioc::make<TImplementation>, this);
-    if (const auto serviceConstructorIt = m_serviceConstructors.find(interfaceIndex);
-        serviceConstructorIt != std::ranges::cend(m_serviceConstructors)) {
-      serviceConstructorIt->second = std::move(constructor);
-    } else {
-      m_serviceConstructors.emplace(interfaceIndex, std::move(constructor));
-    }
+  template<HasDependencies T, class... TDependencies>
+    requires(std::is_constructible_v<T, std::shared_ptr<TDependencies>...>)
+  auto makeWithDependencies(ServicesUser<TDependencies...>* /*deductor>*/) const noexcept -> T {
+    return T{m_container.resolveService<TDependencies>()...};
   }
 
-  std::unordered_map<InterfaceTypeIndex, std::move_only_function<void*() const>> m_serviceConstructors;
+  Container m_container;
 };
 
 } // namespace long_do::ioc

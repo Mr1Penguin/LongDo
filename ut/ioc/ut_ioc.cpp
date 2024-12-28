@@ -4,6 +4,7 @@
 #include <qtestcase.h>
 
 #include "Ioc.hpp"
+#include "ServiceUser.hpp"
 
 namespace {
 
@@ -17,7 +18,27 @@ public:
   virtual ~Interface()                   = default;
 };
 
+class Interface2 {
+public:
+  Interface2()                             = default;
+  Interface2(const Interface2&)            = default;
+  Interface2(Interface2&&)                 = delete;
+  Interface2& operator=(const Interface2&) = default;
+  Interface2& operator=(Interface2&&)      = delete;
+  virtual ~Interface2()                    = default;
+};
+
 class Implementation : public Interface {};
+
+class User : public long_do::ioc::ServicesUser<Interface, Interface2> {
+public:
+  User(std::shared_ptr<Interface> s1, std::shared_ptr<Interface2> s2) : ServicesLoader(std::move(s1), std::move(s2)) {}
+
+  template<class T>
+  T* service() const {
+    return ServiceUser<T>::service().get();
+  }
+};
 
 } // namespace
 
@@ -26,21 +47,13 @@ class IocTest : public QObject {
 
 private slots:
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  void shouldReturnNullptrForUnregistered() {
-    const long_do::ioc::Ioc ioc;
-    const std::shared_ptr<Interface> serviceInterface = ioc.resolveService<Interface>();
-    QVERIFY(!serviceInterface);
-  }
-
-  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  void shouldResolveRegisteredServiceByInterace() {
+  void shouldCreateWithDependencies() {
     long_do::ioc::Ioc ioc;
-    ioc.registerService<Interface, Implementation>();
-    const std::shared_ptr<Interface> serviceInterface = ioc.resolveService<Interface>();
-    QVERIFY(serviceInterface);
-    const std::shared_ptr<Implementation> serviceImplementation =
-        std::dynamic_pointer_cast<Implementation>(serviceInterface);
-    QVERIFY(serviceImplementation);
+    ioc.registerSingleton<Interface, Implementation>();
+
+    static_assert(long_do::ioc::HasDependencies<User>);
+
+    auto user = ioc.make<User>();
   }
 };
 
