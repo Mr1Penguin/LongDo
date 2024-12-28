@@ -1,7 +1,6 @@
 #pragma once
 
 #include <concepts>
-#include <memory>
 
 #include "Container.hpp"
 #include "ServiceUser.hpp"
@@ -32,9 +31,10 @@ private:
   }
 
   template<HasDependencies T, class... TDependencies>
-    requires(std::is_constructible_v<T, std::shared_ptr<TDependencies>...>)
+    requires(std::is_constructible_v<T, typename ServicesUser<TDependencies...>::DependencyContainer>)
   auto makeWithDependencies(ServicesUser<TDependencies...>* /*deductor>*/) const noexcept -> T {
-    return T{m_container.resolveService<TDependencies>()...};
+    using DependencyContainer = typename ServicesUser<TDependencies...>::DependencyContainer;
+    return T{DependencyContainer{m_container.resolveService<TDependencies>()...}};
   }
 
   Container m_container;

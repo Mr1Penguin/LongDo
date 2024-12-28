@@ -1,6 +1,5 @@
 #include <QObject>
 #include <QTest>
-#include <memory>
 #include <qtestcase.h>
 
 #include "Ioc.hpp"
@@ -29,14 +28,25 @@ public:
 };
 
 class Implementation : public Interface {};
+class Implementation2 : public Interface2 {};
 
-class User : public long_do::ioc::ServicesUser<Interface, Interface2> {
+class User : public long_do::ioc::ServicesUser<Interface> {
 public:
-  User(std::shared_ptr<Interface> s1, std::shared_ptr<Interface2> s2) : ServicesLoader(std::move(s1), std::move(s2)) {}
+  User(DependencyContainer && cont) : ServicesLoader(std::move(cont)) {}
 
   template<class T>
   T* service() const {
-    return ServiceUser<T>::service().get();
+    return ServicesLoader::service<T>();
+  }
+};
+
+class User2 : public long_do::ioc::ServicesUser<Interface, Interface2> {
+public:
+  User2(DependencyContainer && cont) : ServicesLoader(std::move(cont)) {}
+
+  template<class T>
+  T* service() const {
+    return ServicesLoader::service<T>();
   }
 };
 
@@ -47,13 +57,26 @@ class IocTest : public QObject {
 
 private slots:
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  void shouldCreateWithDependencies() {
+  void shouldCreateWithDependency() {
     long_do::ioc::Ioc ioc;
     ioc.registerSingleton<Interface, Implementation>();
 
-    static_assert(long_do::ioc::HasDependencies<User>);
+    auto user       = ioc.make<User>();
+    auto* interface = user.service<Interface>();
+    QVERIFY(interface);
+  }
 
-    auto user = ioc.make<User>();
+  // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
+  void shouldCreateWithDependencies() {
+    long_do::ioc::Ioc ioc;
+    ioc.registerSingleton<Interface, Implementation>();
+    ioc.registerSingleton<Interface2, Implementation2>();
+
+    auto user       = ioc.make<User2>();
+    auto* interface = user.service<Interface>();
+    QVERIFY(interface);
+    auto* interface2 = user.service<Interface2>();
+    QVERIFY(interface2);
   }
 };
 

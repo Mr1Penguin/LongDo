@@ -4,7 +4,6 @@
 #include <qtestcase.h>
 
 #include "Container.hpp"
-#include "ServiceUser.hpp"
 
 namespace {
 
@@ -31,16 +30,6 @@ public:
 class Implementation : public Interface {
 public:
   static Implementation* create() { return new Implementation(); }
-};
-
-class User : public long_do::ioc::ServicesUser<Interface, Interface2> {
-public:
-  User(std::shared_ptr<Interface> s1, std::shared_ptr<Interface2> s2) : ServicesLoader(std::move(s1), std::move(s2)) {}
-
-  template<class T>
-  T* service() const {
-    return ServiceUser<T>::service().get();
-  }
 };
 
 } // namespace
