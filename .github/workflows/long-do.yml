@@ -1,5 +1,5 @@
 name: Long Do
-run-name: Checking LongDo pull request
+run-name: Checking LongDo
 on: [push, pull_request]
 jobs:
   build:
