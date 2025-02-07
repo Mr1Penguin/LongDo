@@ -10,9 +10,9 @@
       "name": "default",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/default",
-      "cachevariables": [
+      "cachevariables": {
 	"DOWNLOAD_BOOST_DI": "ON"
-      ]
+      }
     },
     {
       "name": "ninja-multi",
