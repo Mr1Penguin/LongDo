@@ -20,8 +20,14 @@ protected:
   ServiceUser(ServiceUser&&) noexcept            = default;
   ServiceUser& operator=(const ServiceUser&)     = default;
   ServiceUser& operator=(ServiceUser&&) noexcept = default;
-  TService& service() noexcept { return *m_service; }
-  const TService& service() const noexcept { return *m_service; }
+  TService& service() noexcept {
+    assert(m_service != nullptr);
+    return *m_service;
+  }
+  const TService& service() const noexcept {
+    assert(m_service != nullptr);
+    return *m_service;
+  }
 
 private:
   std::shared_ptr<TService> m_service;

@@ -15,8 +15,10 @@ public:
   Interface(Interface&&)                 = delete;
   Interface& operator=(const Interface&) = default;
   Interface& operator=(Interface&&)      = delete;
-  virtual ~Interface()                   = default;
+  virtual ~Interface()                   = 0;
 };
+
+Interface::~Interface() = default;
 
 class Interface2 {
 public:
@@ -25,11 +27,15 @@ public:
   Interface2(Interface2&&)                 = delete;
   Interface2& operator=(const Interface2&) = default;
   Interface2& operator=(Interface2&&)      = delete;
-  virtual ~Interface2()                    = default;
+  virtual ~Interface2()                    = 0;
 };
 
-class Implementation : public Interface {};
-class Implementation2 : public Interface2 {};
+Interface2::~Interface2() = default;
+
+class Implementation : public Interface {
+};
+class Implementation2 : public Interface2 {
+};
 
 class User : public long_do::ioc::ServicesUser<Interface> {
 public:
@@ -60,7 +66,7 @@ private slots:
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   void shouldCreateWithDependency() {
 
-    auto injector = boost::di::make_injector();
+    auto injector = boost::di::make_injector(boost::di::bind<Interface>().to<Implementation>());
 
     long_do::ioc::Ioc ioc(std::move(injector));
 
@@ -70,17 +76,17 @@ private slots:
   }
 
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
-  /*  void shouldCreateWithDependencies() {
-    long_do::ioc::Ioc ioc;
-    ioc.registerSingleton<Interface, Implementation>();
-    ioc.registerSingleton<Interface2, Implementation2>();
+  void shouldCreateWithDependencies() {
+    auto injector = boost::di::make_injector(boost::di::bind<Interface>().to<Implementation>(),
+                                             boost::di::bind<Interface2>().to<Implementation2>());
+    long_do::ioc::Ioc ioc(std::move(injector));
 
     auto user       = ioc.make<User2>();
     auto* interface = user.service<Interface>();
     QVERIFY(interface);
     auto* interface2 = user.service<Interface2>();
     QVERIFY(interface2);
-    }*/
+  }
 };
 
 QTEST_MAIN(IocTest)
