@@ -10,7 +10,7 @@
       "name": "default",
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/default",
-      "cachevariables": {
+      "cacheVariables": {
 	"DOWNLOAD_BOOST_DI": "ON"
       }
     },
