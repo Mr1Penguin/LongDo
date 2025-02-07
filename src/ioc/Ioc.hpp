@@ -1,43 +1,42 @@
 #pragma once
 
-#include <concepts>
-
-#include "Container.hpp"
 #include "ServiceUser.hpp"
 
 namespace long_do::ioc {
 
+namespace detail {
+template<class T>
+concept HasDependencies = requires(T obj) { typename T::DepenndencyContainer; };
+} // namespace detail
+
+template<class TInjector>
 class Ioc {
+private:
 public:
-  template<class TInterface, std::derived_from<TInterface> TImplementation>
-  void registerService() {
-    m_container.registerService<TInterface, TImplementation>(std::bind_front(&Ioc::make<TImplementation>, this));
-  }
+  Ioc(TInjector injector) : m_injector(std::move(injector)) {}
 
-  template<class TInterface, std::derived_from<TInterface> TImplementation>
-  void registerSingleton(auto&&... args) {
-    m_container.registerSingleton<TInterface, TImplementation>(std::forward<decltype(args)>(args)...);
-  }
-
-  template<HasDependencies T>
+  template<detail::HasDependencies T>
   [[nodiscard]] auto make() const noexcept -> T {
     return makeWithDependencies<T>(static_cast<T*>(nullptr));
   }
 
+  template<class T>
+  [[nodiscard]] auto make() const noexcept -> T {
+    return m_injector.template create<T>();
+  }
+
 private:
-  template<class TImplementation>
-  [[nodiscard]] TImplementation* make() const noexcept {
-    return new TImplementation();
-  }
-
-  template<HasDependencies T, class... TDependencies>
+  template<detail::HasDependencies T, class... TDependencies>
     requires(std::is_constructible_v<T, typename ServicesUser<TDependencies...>::DependencyContainer>)
-  auto makeWithDependencies(ServicesUser<TDependencies...>* /*deductor>*/) const noexcept -> T {
+  auto makeWithDependencies(ServicesUser<TDependencies...>* /*deductor*/) const noexcept -> T {
     using DependencyContainer = typename ServicesUser<TDependencies...>::DependencyContainer;
-    return T{DependencyContainer{m_container.resolveService<TDependencies>()...}};
+    return T{m_injector.template create<DependencyContainer>};
   }
 
-  Container m_container;
+  TInjector m_injector;
 };
+
+template<class TInjector>
+Ioc(TInjector) -> Ioc<TInjector>;
 
 } // namespace long_do::ioc

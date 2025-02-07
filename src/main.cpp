@@ -3,15 +3,17 @@
 #include <QObject>
 #include <QQmlApplicationEngine>
 #include <QString>
+#include <QStringLiteral>
 #include <QUrl>
 #include <Qt>
 
 int main(int argc, char** argv) {
   QGuiApplication app(argc, argv);
-
   QQmlApplicationEngine engine;
 
-  const QUrl mainPage{u"qrc:/qt/qml/long_do/main.qml"_qs};
+  using namespace Qt::StringLiterals;
+
+  const QUrl mainPage{u"qrc:/qt/qml/long_do/main.qml"_s};
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
       [&mainPage](QObject* obj, const QUrl& objUrl) {

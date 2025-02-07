@@ -10,12 +10,15 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 6.5 COMPONENTS Quick Gui REQUIRED)
 qt_standard_project_setup(REQUIRES 6.5)
 
+include(External.cmake)
+
 qt_add_executable(long-do
   src/main.cpp
 )
 
 target_include_directories(long-do
   PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}/src/ioc
 )
 
@@ -41,7 +44,7 @@ qt_add_qml_module(long-do
   qml/main.qml
 )
 
-target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick)
+target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick boost-di)
 
 if(CLANG_TIDY_RUN)
   file(WRITE "${CMAKE_BINARY_DIR}/.clang-tidy" "Checks: '-*,llvm-twine-local'\n")

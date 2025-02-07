@@ -1,5 +1,6 @@
 # Prerequisites
 *.d
+.cache
 
 # Compiled Object files
 *.slo
@@ -32,3 +33,6 @@
 *.app
 build
 *~
+
+# cmake
+Testing/
