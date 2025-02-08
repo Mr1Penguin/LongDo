@@ -1,9 +1,20 @@
 import QtQuick
-import QtQuick.Window
+import QtQuick.Layouts
+import QtQuick.Controls as Controls
+import org.kde.kirigami as Kirigami
 
-Window {
-    width: 640
-    height: 480
-    visible: true
-    title: qsTr("Hello World")
+Kirigami.ApplicationWindow {
+    id: root
+
+    width: 400
+    height: 300
+
+    title: i18nc("@title:window", "Hello World")
+
+    pageStack.initialPage: Kirigami.Page {
+        Controls.Label {
+            anchors.centerIn: parent
+            text: i18n("Hello World!")
+        }
+    }
 }

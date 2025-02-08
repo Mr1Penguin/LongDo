@@ -1,17 +1,22 @@
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QObject>
+#include <QQmlContext>
 #include <QQmlApplicationEngine>
 #include <QString>
 #include <QStringLiteral>
 #include <QUrl>
 #include <Qt>
 
-int main(int argc, char** argv) {
-  QGuiApplication app(argc, argv);
-  QQmlApplicationEngine engine;
+#include <klocalizedcontext.h>
+#include <klocalizedstring.h>
 
+int main(int argc, char** argv) {
   using namespace Qt::StringLiterals;
+
+  QGuiApplication app(argc, argv);
+  KLocalizedString::setApplicationDomain("long-do"_ba);
+  QQmlApplicationEngine engine;
 
   const QUrl mainPage{u"qrc:/qt/qml/long_do/main.qml"_s};
   QObject::connect(
@@ -22,6 +27,10 @@ int main(int argc, char** argv) {
         }
       },
       Qt::QueuedConnection);
+
+  //NOLINTNEXTLINE
+  engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
+
   engine.load(mainPage);
 
   return QGuiApplication::exec();

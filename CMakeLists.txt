@@ -7,7 +7,27 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_AUTOMOC ON)
 
+find_package(ECM 6.0.0 REQUIRED NO_MODULE)
+list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
+
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+include(ECMFindQmlModule)
+include(ECMQmlModule)
+
 find_package(Qt6 6.5 COMPONENTS Quick Gui REQUIRED)
+find_package(KF6
+  REQUIRED
+  COMPONENTS
+  Kirigami
+  I18n
+  CoreAddons
+  QQC2DesktopStyle
+  IconThemes
+)
+ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
+
 qt_standard_project_setup(REQUIRES 6.5)
 
 include(External.cmake)
@@ -44,7 +64,15 @@ qt_add_qml_module(long-do
   qml/main.qml
 )
 
-target_link_libraries(long-do PRIVATE Qt6::Gui Qt6::Quick boost-di)
+target_link_libraries(long-do
+  PRIVATE
+  Qt6::Gui
+  Qt6::Quick
+  boost-di
+  KF6::I18n
+  KF6::CoreAddons
+  KF6::IconThemes
+)
 
 if(CLANG_TIDY_RUN)
   file(WRITE "${CMAKE_BINARY_DIR}/.clang-tidy" "Checks: '-*,llvm-twine-local'\n")
