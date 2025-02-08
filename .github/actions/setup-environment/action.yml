@@ -8,3 +8,4 @@ runs:
       with:
         version: 6.5.*
     - run: sudo apt-get install -y extra-cmake-modules
+      shell: bash
