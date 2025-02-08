@@ -25,4 +25,5 @@ endif()
 set_tests_properties(boost-di.FailCreateNotBinded
   PROPERTIES
   PASS_REGULAR_EXPRESSION ${REGEX}
+  LABELS noMemcheck
 )

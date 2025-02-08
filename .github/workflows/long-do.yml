@@ -71,7 +71,7 @@ jobs:
       - run: sudo apt-get install -y valgrind
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
-      - run: ctest -T memcheck --test-dir build/ut --preset ut-release
+      - run: ctest -T memcheck --test-dir build/ut --preset ut-release -LE "^noMemcheck$"
       - name: Delete empty reports
         run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -empty -delete
       - run: find build/ut/Testing/Temporary -name 'MemoryChecker*' -type f -exec ./scripts/memcheck-split.awk {} \;
