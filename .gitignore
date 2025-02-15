@@ -36,3 +36,5 @@ build
 
 # cmake
 Testing/
+external/
+local_root/

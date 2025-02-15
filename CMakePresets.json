@@ -11,7 +11,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/default",
       "cacheVariables": {
-	"DOWNLOAD_BOOST_DI": "ON"
+	"DOWNLOAD_BOOST_DI": "ON",
+	"CMAKE_PREFIX_PATH": "local_root"
       }
     },
     {

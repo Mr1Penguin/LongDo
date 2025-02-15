@@ -7,5 +7,5 @@ runs:
       uses: jurplel/install-qt-action@v4
       with:
         version: 6.5.*
-    - run: sudo apt-get install -y extra-cmake-modules
+    - run: make gha
       shell: bash
