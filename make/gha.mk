@@ -2,7 +2,7 @@
 
 gha: local_root/share/ECM/cmake/ECMConfig.cmake
 
-local_root/usr/share/ECM/cmake/ECMConfig.cmake: external/extra-cmake-modules/build local_root
+local_root/share/ECM/cmake/ECMConfig.cmake: external/extra-cmake-modules/build local_root
 	cmake --install $<
 
 external/extra-cmake-modules/build: external/extra-cmake-modules
