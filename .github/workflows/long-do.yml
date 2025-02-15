@@ -11,6 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: configure
         run: cmake -S . --preset ninja-multi
         env:
@@ -27,6 +30,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cmake --workflow --preset ${{ matrix.preset }}
         env:
           CXX: ${{ matrix.cxx }}
@@ -48,6 +54,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: sudo apt-get remove gcc-14
       - run: sudo apt-get autoremove
       - run: sudo apt-get install -y clazy
@@ -61,6 +70,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cmake --workflow --preset ut-clang-tidy
   ut_valgrind:
     runs-on: ubuntu-latest
@@ -68,6 +80,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: sudo apt-get install -y valgrind
       - run: cmake --preset ut
       - run: cmake --build --preset ut-release
@@ -96,4 +111,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-environment
+      - run: make gha
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: cmake --workflow --preset ut-san
