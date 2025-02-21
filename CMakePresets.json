@@ -17,6 +17,7 @@
     {
       "name": "ninja-multi",
       "inherits": "default",
+      "binaryDir": "${sourceDir}/build/ninja-multi",
       "generator": "Ninja Multi-Config"
     },
     {
