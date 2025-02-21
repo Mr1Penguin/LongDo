@@ -16,6 +16,18 @@ include(KDECompilerSettings NO_POLICY_SCOPE)
 include(ECMFindQmlModule)
 include(ECMQmlModule)
 
+list(APPEND CMAKE_FIND_ROOT_PATH ${PROJECT_SOURCE_DIR}/local_root)
+
+find_path(boost-di-root
+  NAMES
+  "boost/di.hpp"
+  REQUIRED
+)
+
+message(STATUS "Found boost-di: ${boost-di-root}")
+add_library(boost-di INTERFACE IMPORTED)
+target_include_directories(boost-di SYSTEM INTERFACE ${boost-di-root})
+
 find_package(Qt6 6.5 COMPONENTS Quick Gui REQUIRED)
 find_package(KF6
   REQUIRED
@@ -29,8 +41,6 @@ find_package(KF6
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 
 qt_standard_project_setup(REQUIRES 6.5)
-
-include(External.cmake)
 
 qt_add_executable(long-do
   src/main.cpp

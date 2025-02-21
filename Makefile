@@ -2,9 +2,9 @@
 
 list:
 	@echo compile_commands.json
-	@echo gha
+	@echo deps
 
-include make/gha.mk
+include make/deps.mk
 
 compile_commands.json: build/default/compile_commands.json
 	cp build/default/compile_commands.json .
