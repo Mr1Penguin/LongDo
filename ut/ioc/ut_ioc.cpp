@@ -42,7 +42,7 @@ public:
   User(DependencyContainer&& cont) : ServicesUser(std::move(cont)) {}
 
   template<class T>
-  const T* service() const {
+  [[nodiscard]] const T* service() const {
     return &ServicesUser::service<T>();
   }
 };
@@ -52,7 +52,7 @@ public:
   User2(DependencyContainer&& cont) : ServicesUser(std::move(cont)) {}
 
   template<class T>
-  const T* service() const {
+  [[nodiscard]] const T* service() const {
     return &ServicesUser::service<T>();
   }
 };
@@ -62,16 +62,16 @@ public:
 class IocTest : public QObject {
   Q_OBJECT
 
-private slots:
+private Q_SLOTS:
   // NOLINTNEXTLINE(readability-convert-member-functions-to-static)
   void shouldCreateWithDependency() {
 
     auto injector = boost::di::make_injector(boost::di::bind<Interface>().to<Implementation>());
 
-    long_do::ioc::Ioc ioc(std::move(injector));
+    const long_do::ioc::Ioc ioc(std::move(injector));
 
     auto user       = ioc.make<User>();
-    auto* interface = user.service<Interface>();
+    const auto* interface = user.service<Interface>();
     QVERIFY(interface);
   }
 
@@ -79,12 +79,12 @@ private slots:
   void shouldCreateWithDependencies() {
     auto injector = boost::di::make_injector(boost::di::bind<Interface>().to<Implementation>(),
                                              boost::di::bind<Interface2>().to<Implementation2>());
-    long_do::ioc::Ioc ioc(std::move(injector));
+    const long_do::ioc::Ioc ioc(std::move(injector));
 
     auto user       = ioc.make<User2>();
-    auto* interface = user.service<Interface>();
+    const auto* interface = user.service<Interface>();
     QVERIFY(interface);
-    auto* interface2 = user.service<Interface2>();
+    const auto* interface2 = user.service<Interface2>();
     QVERIFY(interface2);
   }
 };
