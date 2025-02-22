@@ -1,37 +1,28 @@
-#include <QCoreApplication>
 #include <QGuiApplication>
-#include <QObject>
-#include <QQmlContext>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 #include <QString>
 #include <QStringLiteral>
 #include <QUrl>
-#include <Qt>
 
 #include <klocalizedcontext.h>
 #include <klocalizedstring.h>
 
+#include "MainPageLoader.hpp"
+
 int main(int argc, char** argv) {
   using namespace Qt::StringLiterals;
 
-  QGuiApplication app(argc, argv);
+  const QGuiApplication app(argc, argv);
   KLocalizedString::setApplicationDomain("long-do"_ba);
   QQmlApplicationEngine engine;
 
-  const QUrl mainPage{u"qrc:/qt/qml/long_do/main.qml"_s};
-  QObject::connect(
-      &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [&mainPage](QObject* obj, const QUrl& objUrl) {
-        if (obj == nullptr && mainPage == objUrl) {
-          QCoreApplication::exit(-1);
-        }
-      },
-      Qt::QueuedConnection);
+  auto locContext = KLocalizedContext{&engine};
 
-  //NOLINTNEXTLINE
-  engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
+  engine.rootContext()->setContextObject(&locContext);
 
-  engine.load(mainPage);
+  auto pageLoader = longdo::MainPageLoader{QUrl{u"qrc:/qt/qml/long_do/main.qml"_s}};
+  pageLoader.load(engine);
 
   return QGuiApplication::exec();
 }

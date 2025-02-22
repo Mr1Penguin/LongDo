@@ -264,3 +264,133 @@
    fun:_dl_init
    obj:/usr/lib64/ld-linux-x86-64.so.2
 }
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   fun:pthread_create
+   fun:_ZN7QThread5startENS_8PriorityE
+   obj:/usr/lib64/libQt6Test.so.6.8.1
+   obj:/usr/lib64/libQt6Test.so.6.8.1
+   fun:_ZN5QTest4qRunEv
+   fun:_ZN5QTest5qExecEP7QObjectiPPc
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:g_malloc0
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:g_malloc0
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:g_malloc
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:g_malloc
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:g_malloc
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   obj:/usr/lib/gcc/x86_64-pc-linux-gnu/14/libgomp.so.1.0.0
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:g_realloc
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:g_hash_table_new_full
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   obj:/usr/lib64/libglib-2.0.so.0.8000.5
+   fun:call_init
+   fun:_dl_init
+   obj:/usr/lib64/ld-linux-x86-64.so.2
+}
