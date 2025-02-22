@@ -20,4 +20,5 @@ private:
   QUrl m_pageUrl;
   QMetaObject::Connection m_connection;
 };
+
 } // namespace longdo
