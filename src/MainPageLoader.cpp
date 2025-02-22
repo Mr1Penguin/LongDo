@@ -7,8 +7,8 @@ namespace longdo {
 MainPageLoader::MainPageLoader(QUrl pageUrl) : m_pageUrl(std::move(pageUrl)) {}
 
 void MainPageLoader::load(QQmlApplicationEngine& engine) {
-  QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, this, &MainPageLoader::checkLoadedPage,
-                   Qt::QueuedConnection);
+  m_connection = QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, this,
+                                  &MainPageLoader::checkLoadedPage, Qt::QueuedConnection);
   engine.load(m_pageUrl);
 }
 
